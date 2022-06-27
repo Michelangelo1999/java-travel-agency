@@ -1,7 +1,6 @@
 package jana60.vacanza;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -15,10 +14,21 @@ public class Vacanza {
 	private String dataInizio;
 	private String dataFine;
 	
-	public Vacanza(String destinazione, String dataInizio, String dataFine) {
+	public Vacanza(String destinazione, String dataInizio, String dataFine) throws Exception {
 		super();
+		//converto le stringhe inserite
+		LocalDate dataInizioDate = convertiData(dataInizio);
+		LocalDate dataFineDate = convertiData(dataFine);
+		
+		//gestisco l'errore di conversione
+		if(dataInizio == null || dataFine == null) {
+			throw new Exception("L'inserimento delle date non è valido");
+		}
 		
 		//controlli sulle date
+		if(!isValidDataInizio(dataInizioDate) || !isValidDataFine(dataFineDate)) {
+			throw new Exception("");
+		}
 		
 		
 		//controlli sui valori dei campi
@@ -60,8 +70,8 @@ public class Vacanza {
 		return oggi.isBefore(dataInizio);
 	}
 	
-	public boolean isValidDataFine(LocalDate dataFine) {
-		
+	public boolean isValidDataFine(LocalDate dataFine, LocalDate dataInizio) {
+		return dataFine.isAfter(dataInizio);
 	}
 	
 	
