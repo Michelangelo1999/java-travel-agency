@@ -1,10 +1,7 @@
 package jana60.vacanza;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,24 +11,26 @@ public class Vacanza {
 	private String dataInizio;
 	private String dataFine;
 	
-	public Vacanza(String destinazione, String dataInizio, String dataFine) throws Exception {
+	public Vacanza(String destinazione, String dataInizio, String dataFine) throws Exception, NullPointerException {
 		super();
 		//converto le stringhe inserite
 		LocalDate dataInizioDate = convertiData(dataInizio);
 		LocalDate dataFineDate = convertiData(dataFine);
 		
-		//gestisco l'errore di conversione
-		if(dataInizio == null || dataFine == null) {
-			throw new Exception("L'inserimento delle date non è valido");
+		//gestisco l'errore di conversione o di inserimento
+		if(dataInizioDate == null || dataFineDate == null) {
+			throw new NullPointerException("L'inserimento delle date non è valido");
 		}
 		
 		//controlli sulle date
-		if(!isValidDataInizio(dataInizioDate) || !isValidDataFine(dataFineDate)) {
-			throw new Exception("");
+		if(!isValidDataInizio(dataInizioDate) || !isValidDataFine(dataFineDate, dataInizioDate)) {
+			throw new Exception("Le date inserite non hanno senso");
 		}
 		
-		
 		//controlli sui valori dei campi
+		if(destinazione == null) {
+			throw new Exception("La destinazione non può essere vuota");
+		}
 		
 		this.destinazione = destinazione;
 		this.dataInizio = dataInizio;
